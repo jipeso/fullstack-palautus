@@ -1,20 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import personService from './services/persons'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
   const [bookFilter, setBookFilter] = useState('')
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [message, setMessage] = useState(null)
+
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+  }, [])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -32,7 +38,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter bookFilter={bookFilter} handleFilterChange={handleFilterChange}/>
+      <Notification message={message} />
+      <Filter
+        bookFilter={bookFilter}
+        handleFilterChange={handleFilterChange}
+      />
       <h2>add a new</h2>
       <PersonForm
         persons={persons}
@@ -43,9 +53,16 @@ const App = () => {
         setNewNumber={setNewNumber}
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}
+        setMessage={setMessage}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} showAll={showAll} bookFilter={bookFilter}/>
+      <Persons
+        persons={persons}
+        showAll={showAll}
+        bookFilter={bookFilter}
+        setPersons={setPersons}
+        setMessage={setMessage}
+      />
     </div>
   )
 }
