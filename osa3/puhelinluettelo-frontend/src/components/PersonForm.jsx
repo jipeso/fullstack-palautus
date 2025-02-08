@@ -34,9 +34,7 @@ const PersonForm = ({
             }, 4000)
             })
           .catch(error => {
-            setMessage(
-              `Information of ${existingPerson.name} has already been removed`
-            )
+            setMessage(error.response.data.error)
             setTimeout(() => {
               setMessage(null)
             }, 4000)
@@ -59,6 +57,13 @@ const PersonForm = ({
         setTimeout(() => {
           setMessage(null)
         }, 4000)        
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        setMessage(error.response.data.error)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
     }
   }

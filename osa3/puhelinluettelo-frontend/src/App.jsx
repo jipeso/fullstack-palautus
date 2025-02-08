@@ -31,8 +31,9 @@ const App = () => {
   }
 
   const handleFilterChange = (event) => {
-    setBookFilter(event.target.value)
-    setShowAll(bookFilter.length === 0)
+    const newFilter = event.target.value
+    setBookFilter(newFilter)
+    setShowAll(newFilter === 0)
   }
 
   return (
