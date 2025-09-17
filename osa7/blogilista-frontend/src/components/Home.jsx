@@ -6,7 +6,7 @@ import BlogForm from "./BlogForm"
 import BlogList from "./BlogList"
 
 const Home = () => {
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.user.loggedUser)
   const blogFormRef = useRef()
 
   return (

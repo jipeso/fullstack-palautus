@@ -3,31 +3,30 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
 	Routes,
 	Route,
-	Link,
 	Navigate,
-	useMatch,
 	useNavigate,
 } from 'react-router-dom'
 
 import UserList from './components/UserList'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
-
+import User from './components/User'
 import Home from './components/Home'
 
 import { initializeBlogs } from './reducers/blogReducer'
-import { initializeUser, logoutUser } from './reducers/userReducer'
+import { initializeUser, logoutUser, initilizeAllUsers } from './reducers/userReducer'
 
 
 const App = () => {
 	const dispatch = useDispatch()
-	const user = useSelector(state => state.user)
+	const user = useSelector(state => state.user.loggedUser)
 
 	const [loginVisible, setLoginVisible] = useState(false)
 
 	useEffect(() => {
 		dispatch(initializeUser())
 		dispatch(initializeBlogs())
+		dispatch(initilizeAllUsers())
 	}, [dispatch])
 
 	const handleLogout = () => {
@@ -69,6 +68,7 @@ const App = () => {
 
 			<Routes>
 				<Route path="/users" element={<UserList />} />
+				<Route path="/users/:id" element={<User />} />	
 				<Route path="/" element={<Home />} />
 			</Routes>
 		</div>
