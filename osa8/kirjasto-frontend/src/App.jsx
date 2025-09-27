@@ -16,9 +16,9 @@ const App = () => {
   return (
     <div className="p-4">
       <div>
-        <Link to="/" className="nav-link">authors</Link>
-        <Link to="/books" className="nav-link">books</Link>
-        <Link to="/add" className="nav-link">add book</Link>
+        <Link to="/" className="px-4 py-2 border hover:bg-gray-200">authors</Link>
+        <Link to="/books" className="px-4 py-2 border hover:bg-gray-200">books</Link>
+        <Link to="/add" className="px-4 py-2 border hover:bg-gray-200">add book</Link>
       </div>
       <Routes>
         <Route path="/" element={<Authors authors={authors.data.allAuthors}/>} />

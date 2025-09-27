@@ -1,8 +1,1 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
-
-@layer components {
-  .nav-link {
-    @apply px-4 py-2 border hover:bg-gray-200;
-  }
-}
