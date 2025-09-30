@@ -51,7 +51,7 @@ const Authors = ({ authors }) => {
         <form className="space-y-4" onSubmit={submit}>
           <div>
             <Select
-              defaultValue={selectedAuthor}
+              value={selectedAuthor}
               onChange={setSelectedAuthor}
               options={options}
             />

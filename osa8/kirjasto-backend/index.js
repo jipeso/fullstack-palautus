@@ -181,7 +181,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
       const currentUser = context.currentUser
       if (!currentUser) {
         throw new GraphQLError('not authenticated', {
@@ -224,7 +224,7 @@ const resolvers = {
       return book
     },
 
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
 
       if (!currentUser) {
@@ -250,7 +250,7 @@ const resolvers = {
       }
       return author
     },
-    createUser: async (root, args) => {
+    createUser: async (root, args, context) => {
       const user = new User({ ...args })
 
       return user.save()
