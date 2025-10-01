@@ -1,21 +1,21 @@
 import { useQuery, useApolloClient } from "@apollo/client/react"
 import { useState } from "react"
-import { Routes, Route, Link } from "react-router-dom"
+import { Routes, Route, Link, useNavigate} from "react-router-dom"
 
 import Authors from "./components/Authors"
 import Books from "./components/Books"
 import NewBook from "./components/NewBook"
 import LoginForm from "./components/LoginForm"
-import Notify from "./components/Notify"
+import Recommendations from "./components/Recommendations"
 
 import { ALL_AUTHORS, ALL_BOOKS } from "./queries"
 
 const App = () => {
-  const authors = useQuery(ALL_AUTHORS);
-  const books = useQuery(ALL_BOOKS);
-  const [errorMessage, setErrorMessage] = useState(null)
+  const authors = useQuery(ALL_AUTHORS)
+  const books = useQuery(ALL_BOOKS)
   const [token, setToken] = useState(null)
   const client = useApolloClient()
+  const navigate = useNavigate()
 
   if (authors.loading || books.loading) {
     return <div>loading...</div>
@@ -25,13 +25,7 @@ const App = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
-  }
-
-  const notify = message => {
-    setErrorMessage(message)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
+    navigate("/")
   }
 
   return (
@@ -42,6 +36,7 @@ const App = () => {
         {token ? (
           <>
             <Link to="/add" className="inline-block px-4 py-2 border hover:bg-gray-200">add book</Link>
+            <Link to="/recommendations" className="inline-block px-4 py-2 border hover:bg-gray-200">recommendations</Link>
             <button
               onClick={logout}
               className="inline-block px-4 py-2 border font-bold bg-red-200 hover:bg-red-300"
@@ -59,7 +54,8 @@ const App = () => {
         <Route path="/" element={<Authors authors={authors.data.allAuthors}/>} />
         <Route path="/books" element={<Books books={books.data.allBooks}/>} />
         <Route path="/add" element={<NewBook />} />
-        <Route path="/login" element={<LoginForm setToken={setToken} setError={notify}/>} />
+        <Route path="/login" element={<LoginForm setToken={setToken} navigate={navigate}/>} />
+        <Route path="/recommendations" element={<Recommendations books={books.data.allBooks} />} />
       </Routes>
     </div>
   )

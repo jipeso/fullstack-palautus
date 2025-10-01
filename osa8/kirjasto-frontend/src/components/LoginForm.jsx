@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client/react'
-import { useNavigate } from 'react-router-dom'
 import { LOGIN } from '../queries'
 
-const LoginForm = ({ setError, setToken }) => {
+const LoginForm = ({ setToken, navigate }) => {
   const [username, setUsername] = useState('admin')
   const [password, setPassword] = useState('salasana')
-  const navigate = useNavigate()
 
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
-      setError(error.graphQLErrors[0].message)
+      console.log('login failed', error)
     }
   })
 
