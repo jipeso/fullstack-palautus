@@ -52,7 +52,7 @@ const App = () => {
       </div>
       <Routes>
         <Route path="/" element={<Authors authors={authors.data.allAuthors}/>} />
-        <Route path="/books" element={<Books books={books.data.allBooks}/>} />
+        <Route path="/books" element={<Books />} />
         <Route path="/add" element={<NewBook />} />
         <Route path="/login" element={<LoginForm setToken={setToken} navigate={navigate}/>} />
         <Route path="/recommendations" element={<Recommendations books={books.data.allBooks} />} />
