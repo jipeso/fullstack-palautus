@@ -1,4 +1,4 @@
-import { useQuery, useApolloClient } from "@apollo/client/react"
+import { useQuery, useApolloClient, useSubscription } from "@apollo/client/react"
 import { useState } from "react"
 import { Routes, Route, Link, useNavigate} from "react-router-dom"
 
@@ -8,7 +8,7 @@ import NewBook from "./components/NewBook"
 import LoginForm from "./components/LoginForm"
 import Recommendations from "./components/Recommendations"
 
-import { ALL_AUTHORS, ALL_BOOKS } from "./queries"
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from "./queries"
 
 const App = () => {
   const authors = useQuery(ALL_AUTHORS)
@@ -16,6 +16,13 @@ const App = () => {
   const [token, setToken] = useState(null)
   const client = useApolloClient()
   const navigate = useNavigate()
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded
+      alert(`${addedBook.title} added`)
+    }
+  })
 
   if (authors.loading || books.loading) {
     return <div>loading...</div>
