@@ -10,6 +10,22 @@ import Recommendations from "./components/Recommendations"
 
 import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from "./queries"
 
+export const updateCache = (cache, query, addedBook) => {
+  const uniqByTitle = a => {
+    let seen = new Set()
+    return a.filter((item) => {
+      let k = item.title
+      return seen.has(k) ? false : seen.add(k)
+    })
+  }
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqByTitle(allBooks.concat(addedBook))
+    }
+  })
+}
+
 const App = () => {
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
@@ -21,6 +37,8 @@ const App = () => {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded
       alert(`${addedBook.title} added`)
+
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
     }
   })
 
