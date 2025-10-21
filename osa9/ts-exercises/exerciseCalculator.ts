@@ -1,3 +1,5 @@
+import { isNotNumber } from './utils/helper';
+
 interface exerciseValues {
   exerciseHours: number[],
   target: number
@@ -19,7 +21,7 @@ const parseArgumentsExerciseCalculator = (args: string[]): exerciseValues => {
 
   const numbers = args.slice(2).map(Number);
 
-  if (numbers.some(isNaN)) {
+  if (numbers.some(isNotNumber)) {
     throw new Error('Provided values were not numbers!');
   }
 
@@ -30,7 +32,7 @@ const parseArgumentsExerciseCalculator = (args: string[]): exerciseValues => {
     exerciseHours,
     target
   };
-}
+};
 
 const resultRating = (average: number, target: number) : {rating: number, ratingText: string} => {
   let rating: number;
@@ -46,7 +48,7 @@ const resultRating = (average: number, target: number) : {rating: number, rating
     ratingText = 'not too bad but could be better';
   } else {
     rating = 3;
-    ratingText = 'good job!';
+    ratingText = 'good job';
   }
 
   return { rating, ratingText };
@@ -57,7 +59,7 @@ const calculateAverage = (exerciseHours: number[]) : number => {
   return total / exerciseHours.length;
 };
 
-const calculateExercises = (exerciseHours: number[], target: number) : ExerciseResult => {
+export const calculateExercises = (exerciseHours: number[], target: number) : ExerciseResult => {
   const average = calculateAverage(exerciseHours);
   const { rating, ratingText } = resultRating(average, target);
 
@@ -72,13 +74,15 @@ const calculateExercises = (exerciseHours: number[], target: number) : ExerciseR
   };
 };
 
-try {
-  const { exerciseHours, target } = parseArgumentsExerciseCalculator(process.argv);
-  console.log(calculateExercises(exerciseHours, target));
-} catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
-  }
-  console.log(errorMessage);
-}
+if (require.main === module) {
+  try {
+    const { exerciseHours, target } = parseArgumentsExerciseCalculator(process.argv);
+    console.log(calculateExercises(exerciseHours, target));
+  } catch (error: unknown) {
+    let errorMessage = 'Something bad happened.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    console.log(errorMessage);
+  }  
+};
