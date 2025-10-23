@@ -1,68 +1,14 @@
-import { NewPatient, Gender } from "./types";
+import { z } from "zod";
+import { Gender, NewPatient } from "./types";
 
-const isString = (text: unknown): text is string => {
-  return typeof text === 'string' || text instanceof String;
-};
-
-const isNonEmptyString = (text: unknown): text is string => {
-  return isString(text) && text.trim().length > 0;
-}
-
-const parseName = (name: unknown): string => {
-  if (!isNonEmptyString(name)) {
-    throw new Error('Incorrect or missing name');
-  }
-  return name;
-};
-
-const parseDateOfBirth = (dateOfBirth: unknown): string => {
-  if (!isNonEmptyString(dateOfBirth)) {
-    throw new Error('Incorrect or missing date of birth');
-  }
-  return dateOfBirth;
-};
-
-const parseSsn = (ssn: unknown): string => {
-  if (!isNonEmptyString(ssn)) {
-    throw new Error('Incorrect or missing ssn');
-  }
-  return ssn;
-};
-
-const isGender = (param: string): param is Gender => {
-  return Object.values(Gender).map(v => v.toString()).includes(param);
-}
-
-const parseGender = (gender: unknown): Gender => {
-  if (!isString(gender) || !isGender(gender)) {
-    throw new Error('Incorrect or missing gender');
-  }
-  return gender;
-};
-
-const parseOccupation = (occupation: unknown): string => {
-  if (!isNonEmptyString(occupation)) {
-    throw new Error('Incorrect or missing occupation');
-  }
-  return occupation;
-};
+export const NewPatientSchema = z.object({
+      name: z.string(),
+      dateOfBirth: z.string(),
+      ssn: z.string(),
+      gender: z.enum(Gender),
+      occupation: z.string(),
+});
 
 export const toNewPatient = (object: unknown): NewPatient => {
-  if (!object || typeof object !== 'object') {
-    throw new Error('Invalid or missing data');
-  };
-
-  if ('name' in object && 'dateOfBirth' in object && 'ssn' in object && 'gender' in object && 'occupation' in object) {
-    const newPatient: NewPatient = {
-      name: parseName(object.name),
-      dateOfBirth: parseDateOfBirth(object.dateOfBirth),
-      ssn: parseSsn(object.ssn),
-      gender: parseGender(object.gender),
-      occupation: parseOccupation(object.occupation)
-    };
-
-    return newPatient;
-  }
-
-  throw new Error('Incorrect data: some fields are missing');
+    return NewPatientSchema.parse(object);
 };
