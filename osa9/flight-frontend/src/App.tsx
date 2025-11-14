@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { type ValidationError, type Diary, type NewDiary } from "./types"
+import { type Diary, type NewDiary } from "./types"
 import diaryService from './services/diaries.ts'
 import Diaries from './components/Diaries.tsx'
 import DiaryForm from './components/DiaryForm.tsx'
@@ -22,11 +22,16 @@ const App = () => {
       const returnedDiary = await diaryService.create(diaryObject)
       setDiaries(diaries.concat(returnedDiary))
       setErrorMessage('')
-    } catch (error: any) {
-      if (axios.isAxiosError<ValidationError, Record<string, unknown>>(error)) {
-        setErrorMessage(error.response.data)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data;
+        
+        if (typeof message === 'string') {
+          setErrorMessage(message.split('Something went wrong. ')[1] ?? message)
+        }
+
       } else {
-        setErrorMessage(error)
+        setErrorMessage("Unknown error from server")
       }
 
       setTimeout(() => {

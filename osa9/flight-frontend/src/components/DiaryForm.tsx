@@ -30,23 +30,80 @@ const DiaryForm = ({ addDiary, errorMessage }: DiaryFormProps) => {
         <p style={{ color: 'red' }}>{errorMessage}</p>
       }
       <form onSubmit={handleSubmit}>
-        date
-        <input
-          value={newDate}
-          onChange={(event) => setNewDate(event.target.value)}
-        />
+        <div>
+          date
+          <input
+            type="date"
+            value={newDate}
+            onChange={(event) => setNewDate(event.target.value)}
+          />          
+        </div>
+
         <br />
-        weather
-        <input
-          value={newWeather}
-          onChange={(event) => setNewWeather(event.target.value)}
-        />
+        <div>
+          weather
+          <input
+            type="radio"
+            name="weather"
+            onChange={() => setNewWeather('sunny')}
+          />
+          sunny
+          <input
+            type="radio"
+            name="weather"
+            onChange={() => setNewWeather('rainy')}
+          />
+          rainy
+          <input
+            type="radio"
+            name="weather"
+            onChange={() => setNewWeather('cloudy')}
+          />
+          cloudy
+          <input
+            type="radio"
+            name="weather"
+            onChange={() => setNewWeather('stormy')}
+          />
+          stormy
+          <input
+            type="radio"
+            name="weather"
+            onChange={() => setNewWeather('windy')}
+          />   
+          windy         
+        </div>
+                              
         <br />
-        visibility
-        <input
-          value={newVisibility}
-          onChange={(event) => setNewVisibility(event.target.value)}
-        />
+
+        <div>
+          visibility
+          <input
+            type="radio"
+            name="visibility"
+            onChange={() => setNewVisibility('great')}
+          />
+          great
+          <input
+            type="radio"
+            name="visibility"
+            onChange={() => setNewVisibility('good')}
+          />
+          good
+          <input
+            type="radio"
+            name="visibility"
+            onChange={() => setNewVisibility('ok')}
+          />
+          ok
+          <input
+            type="radio"
+            name="visibility"
+            onChange={() => setNewVisibility('poor')}
+          /> 
+          poor                             
+        </div>
+
         <br />
         comment
         <input
