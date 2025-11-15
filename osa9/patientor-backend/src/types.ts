@@ -7,6 +7,10 @@ export enum Gender {
   Other = 'other',
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface Entry {
+}
+
 export interface Diagnosis {
   code: string;
   name: string;
@@ -19,7 +23,7 @@ export interface Patient extends NewPatient {
   id: string;
 }
 
-export type NonSensitivePatient = Omit<Patient, 'ssn'>;
+export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
 
 
 
