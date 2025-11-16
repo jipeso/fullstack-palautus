@@ -19,18 +19,18 @@ const SickLeaveSchema = z.object({
   endDate: z.string(),
 });
 
-const HealthCheckEntrySchema = BaseEntrySchema.extend({
+export const HealthCheckEntrySchema = BaseEntrySchema.extend({
   type: z.literal("HealthCheck"),
   healthCheckRating: z.enum(HealthCheckRating),
 });
 
-const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
+export const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
   type: z.literal("OccupationalHealthcare"),
   employerName: z.string(),
   sickLeave: SickLeaveSchema.optional(),
 });
 
-const HospitalEntrySchema = BaseEntrySchema.extend({
+export const HospitalEntrySchema = BaseEntrySchema.extend({
   type: z.literal("Hospital"),
   discharge: DischargeSchema,
 });
@@ -64,4 +64,10 @@ export const NewPatientSchema = z.object({
 
 export const toNewPatient = (object: unknown) => {
   return NewPatientSchema.parse(object);
+};
+
+export const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
 };
