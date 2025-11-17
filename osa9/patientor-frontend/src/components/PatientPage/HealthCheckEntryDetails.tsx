@@ -25,24 +25,24 @@ const getHeartColor = (rating: HealthCheckRating): string => {
 
 const HealthCheckEntryDetails = ({ entry, diagnoses } : Props) => {
   return (
-    <Card variant="outlined" sx={{ mb: 2, p: 2}}>
+    <Card variant="outlined">
       <CardContent>
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" alignItems="center" spacing={1}>
           <Typography variant="h6">{entry.date}</Typography>
           <MedicalServices color="primary" />
         </Stack>
 
-        <Typography variant="body1" sx={{ mt: 1, fontStyle: "italic" }}>
-          {entry.description}
+        <Typography>
+          <i>{entry.description}</i>
         </Typography>
 
-        <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 1}}>
+        <Stack direction="row" alignItems="center" spacing={1}>
           <Typography variant="body2">Health check rating</Typography>
           <Favorite sx={{ color: getHeartColor(entry.healthCheckRating) }} />
         </Stack>
 
         {entry.diagnosisCodes && (
-          <List dense sx={{ mt: 1}}>
+          <List>
             {entry.diagnosisCodes?.map(code => {
               const diagnosis = diagnoses.find(d => d.code === code);
               return (
@@ -54,7 +54,7 @@ const HealthCheckEntryDetails = ({ entry, diagnoses } : Props) => {
           </List>
         )}
 
-        <Typography variant="body2" sx={{ mt: 1 }}>
+        <Typography>
           Diagnose by {entry.specialist}
         </Typography>
 

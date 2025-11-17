@@ -94,6 +94,7 @@ const PatientPage = ({ diagnoses } : Props) => {
         onClose={closeModal}
         onSubmit={submitNewEntry}
         error={error}
+        diagnoses={diagnoses}
       />
 
       <div>

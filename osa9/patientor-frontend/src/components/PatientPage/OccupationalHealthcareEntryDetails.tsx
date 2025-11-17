@@ -10,7 +10,7 @@ interface Props {
 
 const OccupationalHealthcareEntryDetails = ({ entry, diagnoses } : Props) => {
    return (
-    <Card variant="outlined" sx={{ mb: 2, p: 2}}>
+    <Card variant="outlined">
       <CardContent>
         <Stack direction="row" spacing={1} alignItems="center">
           <Typography variant="h6">{entry.date}</Typography>
@@ -18,12 +18,12 @@ const OccupationalHealthcareEntryDetails = ({ entry, diagnoses } : Props) => {
           <Typography variant="h6">{entry.employerName}</Typography>
         </Stack>
 
-        <Typography variant="body1" sx={{ mt: 1, fontStyle: "italic" }}>
-          {entry.description}
+        <Typography>
+          <i>{entry.description}</i>
         </Typography>
 
         {entry.diagnosisCodes && (
-          <List dense sx={{ mt: 1}}>
+          <List>
             {entry.diagnosisCodes?.map(code => {
               const diagnosis = diagnoses.find(d => d.code === code);
               return (
@@ -36,12 +36,12 @@ const OccupationalHealthcareEntryDetails = ({ entry, diagnoses } : Props) => {
         )}
 
         {entry.sickLeave && (
-          <Typography variant="body2" sx={{ mt: 1 }}>
+          <Typography>
             Sick leave: {entry.sickLeave.startDate} - {entry.sickLeave.endDate}
           </Typography>
         )}
         
-        <Typography variant="body2" sx={{ mt: 1 }}>
+        <Typography>
           Diagnose by {entry.specialist}
         </Typography>
 

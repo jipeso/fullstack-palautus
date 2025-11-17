@@ -1,25 +1,26 @@
 import { useState, SyntheticEvent } from "react";
 
-import {  TextField, InputLabel, MenuItem, Select, Grid, Button, Typography } from '@mui/material';
+import {  TextField, InputLabel, MenuItem, Select, Grid, Button, Typography, Autocomplete, Chip } from '@mui/material';
 
-import { EntryFormValues, HealthCheckRating } from "../../types";
+import { EntryFormValues, HealthCheckRating, Diagnosis } from "../../types";
 
 interface Props {
   onCancel: () => void;
   onSubmit: (values: EntryFormValues) => void;
+  diagnoses: Diagnosis[];
 }
 
 const healthCheckRatingOptions = Object.values(HealthCheckRating)
   .filter(v => typeof v === "number") as number[];
 
 
-const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
+const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
   const [type, setType] = useState('HealthCheck');
 
   const [date, setDate] = useState('');
   const [description, setDescrption] = useState('');
   const [specialist, setSpecialist] = useState('');
-  const [diagnosisCodes, setDiagnosisCodes] = useState('');
+  const [diagnosisCodes, setDiagnosisCodes] = useState<Diagnosis[]>([]);
 
   const [healthCheckRating, setHealthCheckRating] = useState(0);
 
@@ -38,8 +39,8 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
       description,
       date,
       specialist,
-      diagnosisCodes: diagnosisCodes
-        ? diagnosisCodes.split(',')
+      diagnosisCodes: diagnosisCodes.length > 0
+        ? diagnosisCodes.map(d => d.code)
         : undefined
     };
 
@@ -84,7 +85,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
     <div>
       <form onSubmit={addEntry}>
         <InputLabel>Type</InputLabel>
-        <Select fullWidth value={type} onChange={e => setType(e.target.value)}>
+        <Select fullWidth value={type} sx={{ mb:2 }} onChange={e => setType(e.target.value)}>
           <MenuItem value="HealthCheck">Health Check</MenuItem>
           <MenuItem value="Hospital">Hospital</MenuItem>
           <MenuItem value="OccupationalHealthcare">Occupational Healthcare</MenuItem>
@@ -92,10 +93,13 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
 
         <TextField
           label="Date"
-          placeholder="YYYY-MM-DD"
+          type="date"
           fullWidth 
           value={date}
           onChange={({ target }) => setDate(target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}          
         />
         <TextField
           label="Description"
@@ -109,19 +113,38 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
           value={specialist}
           onChange={({ target }) => setSpecialist(target.value)}
         />
-        <TextField
-          label="Diagnosis Codes"
-          fullWidth
+
+        <Autocomplete
+          multiple
+          options={diagnoses}
+          getOptionLabel={(option) => `${option.code} - ${option.name}`}
           value={diagnosisCodes}
-          onChange={({ target }) => setDiagnosisCodes(target.value)}
+          onChange={(_, newValue) => setDiagnosisCodes(newValue)}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Diagnosis Codes"
+              placeholder="Select diagnoses"
+            />
+          )}
+          renderTags={(value, getTagProps) =>
+            value.map((option, index) => (
+              <Chip
+                label={option.code}
+                {...getTagProps({ index })}
+                key={option.code}
+              />
+            ))
+          }
         />
 
       {type === "HealthCheck" && (
         <>
-          <InputLabel sx={{ mt: 2 }}>Health Check Rating</InputLabel>
+          <InputLabel>Health Check Rating</InputLabel>
           <Select
             fullWidth
             value={healthCheckRating}
+            sx={{ mb: 2 }}
             onChange={e => setHealthCheckRating(Number(e.target.value))}
           >
             {healthCheckRatingOptions.map(value => (
@@ -135,21 +158,23 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
 
       {type === "Hospital" && (
         <>
-          <Typography sx={{ mt: 2 }}>Discharge</Typography>
+          <Typography sx={{ mb: 2 }}>Discharge</Typography>
           <TextField
             fullWidth
             label="Discharge date"
-            placeholder="YYYY-MM-DD"
+            type="date"
+            InputLabelProps={{
+              shrink: true
+            }}
             value={dischargeDate}
             onChange={e => setDischargeDate(e.target.value)}
-            sx={{ mt: 1 }}
           />
           <TextField
             fullWidth
             label="Discharge criteria"
             value={dischargeCriteria}
+            sx={{ mb: 2 }}
             onChange={e => setDischargeCriteria(e.target.value)}
-            sx={{ mt: 1 }}
           />
         </>
       )}
@@ -161,25 +186,29 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
             label="Employer name"
             value={employerName}
             onChange={e => setEmployerName(e.target.value)}
-            sx={{ mt: 2 }}
           />
 
-          <Typography sx={{ mt: 2 }}>Sick Leave</Typography>
+          <Typography sx={{ mb:2 }}>Sick Leave</Typography>
           <TextField
             fullWidth
             label="Start date"
-            placeholder="YYYY-MM-DD"
+            type="date"
+            InputLabelProps={{
+              shrink: true
+            }}
             value={sickLeaveStart}
             onChange={e => setSickLeaveStart(e.target.value)}
-            sx={{ mt: 1 }}
           />
           <TextField
             fullWidth
             label="End date"
-            placeholder="YYYY-MM-DD"
+            type="date"
+            InputLabelProps={{
+              shrink: true
+            }}
             value={sickLeaveEnd}
+            sx={{ mb: 2 }}
             onChange={e => setSickLeaveEnd(e.target.value)}
-            sx={{ mt: 1 }}
           />
         </>
       )}        
